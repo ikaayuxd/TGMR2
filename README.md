@@ -6,10 +6,15 @@
 
 <b> 
 - Account Report
+  
 - Channel Report
+
 - Group Report
+
 - Get Account/Channel/Public Group Details
+
 - Has all methods for reporting
+
 - Save account session (no need to log in again)
 
 To submit a report, you need api hash/api id of your Telegram account! 
