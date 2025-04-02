@@ -1,0 +1,4 @@
+telethon==1.39.0
+colorama==0.4.6
+prettytable==3.15.1
+asyncio==3.4.3
