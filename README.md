@@ -33,8 +33,7 @@ Click the button below to get your api hash/api id of your Telegram account</b>
 # dependency
 
 ```
-pip install asyncio
-pip install telethon
+pip install -r requirements.txt
 ```
 
 # Install
