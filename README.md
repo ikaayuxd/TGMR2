@@ -45,3 +45,33 @@ python Telegram-Reporter.py
 ```
 
 
+# Telegram Reporter Vip
+
+<img src="https://github.com/user-attachments/assets/5aeafe1a-feeb-48aa-ad5d-e1331dd26a11"> 
+
+<img src="https://github.com/user-attachments/assets/55211753-6d87-4812-89a5-815a6a27d99b"> 
+
+### Features: 
+
+- Add unlimited accounts ✅
+
+- Manage accounts ✅
+
+- Send reports with one or more accounts ✅
+
+- Block with one or more accounts ✅
+
+- Send spam with one or more accounts ✅
+
+- Send reports to site support ✅
+
+- Send reports to support email ✅
+
+- + Email/apppass for Email Sender
+
+`Written in Python and open source with free updates ♻️`
+
+`Payment method: Crypto (Usdt, btc, ltc, etc... and Git card)`
+
+
+Buy: t.me/Artax3rxes
