@@ -44,6 +44,7 @@ cd Telegram-Reporter
 python Telegram-Reporter.py
 ```
 
+-----------------------------
 
 # Telegram Reporter Vip
 
