@@ -67,11 +67,11 @@ python Telegram-Reporter.py
 
 - Send reports to support email ✅
 
-- + Email/apppass for Email Sender
+- Email/apppass for Email Sender
 
 `Written in Python and open source with free updates ♻️`
 
 `Payment method: Crypto (Usdt, btc, ltc, etc... and Git card)`
 
 
-Buy: t.me/Artax3rxes
+Buy: https://t.me/Artax3rxes
