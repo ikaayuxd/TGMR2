@@ -11,7 +11,7 @@ from telethon.tl import types
 logging.basicConfig(level=logging.INFO)
 
 # Initialize the bot with the provided token
-TOKEN = '6590125561:AAHd36L0bQ2E2APSgvPSKcDNu4OVqstW690'
+TOKEN = '6590125561:AAGbf-zI_1nIM3qcexYTP1OjQtZQRmy3gN0'
 bot = TeleBot(TOKEN)
 
 # Function to save account details
