@@ -20,9 +20,9 @@ def save_account(phone, api_id, api_hash):
     if os.path.exists('accounts.json'):
         with open('accounts.json', 'r') as f:
             accounts = json.load(f)
-    
+
     accounts[phone] = {'api_id': api_id, 'api_hash': api_hash}
-    
+
     with open('accounts.json', 'w') as f:
         json.dump(accounts, f)
 
@@ -36,33 +36,37 @@ def report(message):
     bot.register_next_step_handler(message, handle_phone)
 
 def handle_phone(message):
-    phone = message.text
+    phone = message.text.strip()
     bot.reply_to(message, "Please enter your API ID:")
     bot.register_next_step_handler(message, handle_api_id, phone)
 
 def handle_api_id(message, phone):
-    api_id = message.text
+    api_id = message.text.strip()
     bot.reply_to(message, "Please enter your API Hash:")
     bot.register_next_step_handler(message, handle_api_hash, phone, api_id)
 
 def handle_api_hash(message, phone, api_id):
-    api_hash = message.text
+    api_hash = message.text.strip()
     save_account(phone, api_id, api_hash)
     bot.reply_to(message, f"Account details saved for {phone}. Now enter the target ID (without @):")
     bot.register_next_step_handler(message, handle_target_id)
 
 def handle_target_id(message):
-    target_id = message.text
+    target_id = message.text.strip()
     bot.reply_to(message, f"Target ID set to {target_id}. Now enter the number of reports:")
     bot.register_next_step_handler(message, handle_num_reports, target_id)
 
 def handle_num_reports(message, target_id):
-    num_reports = int(message.text)
-    bot.reply_to(message, "Choose a reporting method:\n1. Report Spam\n2. Report Other\n3. Report Violence\n4. Report Pornography\n5. Report Copyright")
-    bot.register_next_step_handler(message, handle_report_method, target_id, num_reports)
+    try:
+        num_reports = int(message.text.strip())
+        bot.reply_to(message, "Choose a reporting method:\n1. Report Spam\n2. Report Other\n3. Report Violence\n4. Report Pornography\n5. Report Copyright")
+        bot.register_next_step_handler(message, handle_report_method, target_id, num_reports)
+    except ValueError:
+        bot.reply_to(message, "Please enter a valid number for reports.")
+        bot.register_next_step_handler(message, handle_num_reports, target_id)
 
 def handle_report_method(message, target_id, num_reports):
-    method = message.text
+    method = message.text.strip()
     report_function(target_id, num_reports, method)
     bot.reply_to(message, f"Reporting {target_id} with method {method} for {num_reports} times.")
 
@@ -70,23 +74,42 @@ def report_function(target_id, num_reports, method):
     # Load account details
     with open('accounts.json', 'r') as f:
         accounts = json.load(f)
-    
-    # Assuming the phone number is the key
+
     phone = list(accounts.keys())[0]
     api_id = accounts[phone]['api_id']
     api_hash = accounts[phone]['api_hash']
+
+    # Choose the report reason based on the method
+    reason_mapping = {
+        '1': types.InputReportReasonSpam(),
+        '2': types.InputReportReasonOther(),
+        '3': types.InputReportReasonViolence(),
+        '4': types.InputReportReasonPornography(),
+        '5': types.InputReportReasonCopyright(),
+    }
+
+    reason = reason_mapping.get(method)
+
+    if reason is None:
+        bot.send_message(phone, "Invalid reporting method selected.")
+        return
 
     with TelegramClient('sessions/' + phone, api_id, api_hash) as client:
         for _ in range(num_reports):
             try:
                 client(functions.account.ReportPeerRequest(
                     peer=target_id,
-                    reason=types.InputReportReasonSpam(),
-                    message="Reporting for spam."
+                    reason=reason,
+                    message="Reporting due to selected reason."
                 ))
-                bot.send_message(target_id, f"Reported {target_id} for method {method}.")
+                bot.send_message(phone, f"Successfully reported {target_id} for method {method}.")
+            except FloodWaitError as e:
+                bot.send_message(phone, f"Flood wait error: {e}. Please wait before reporting again.")
+                break
             except Exception as e:
-                bot.send_message(target_id, f"Error reporting {target_id}: {e}")
+                bot.send_message(phone, f"Error reporting {target_id}: {e}")
+                break
 
 # Start polling
 bot.polling()
+    
