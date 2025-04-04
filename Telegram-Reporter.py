@@ -3,7 +3,7 @@ import logging
 import json
 import os
 from telethon.sync import TelegramClient
-from telethon.errors.rpcerrorlist import PhoneNumberBannedError, UserNotParticipantError, FloodWaitError
+from telethon.errors import PhoneNumberBannedError, UserNotParticipantError, FloodWaitError
 from telethon import functions
 from telethon.tl import types
 
@@ -11,7 +11,7 @@ from telethon.tl import types
 logging.basicConfig(level=logging.INFO)
 
 # Initialize the bot with the provided token
-TOKEN = '6590125561:AAGbf-zI_1nIM3qcexYTP1OjQtZQRmy3gN0'
+TOKEN = '6590125561:AAFmvRcEsiIjq3S3vazT8gqVScoKgomunzQ'
 bot = TeleBot(TOKEN)
 
 # Function to save account details
@@ -48,7 +48,16 @@ def handle_api_id(message, phone):
 def handle_api_hash(message, phone, api_id):
     api_hash = message.text.strip()
     save_account(phone, api_id, api_hash)
-    bot.reply_to(message, f"Account details saved for {phone}. Now enter the target ID (without @):")
+
+    bot.reply_to(message, f"Account details saved for {phone}. Please wait while we authenticate.")
+    authenticate_user(phone, api_id, api_hash)
+
+def authenticate_user(phone, api_id, api_hash):
+    with TelegramClient('sessions/' + phone, api_id, api_hash) as client:
+        client.start(phone)  # This triggers the authentication process
+        # At this point, it handles OTP and other login features automatically
+
+    bot.reply_to(message, f"Successfully logged in for {phone}. Now enter the target ID (without @):")
     bot.register_next_step_handler(message, handle_target_id)
 
 def handle_target_id(message):
@@ -112,4 +121,3 @@ def report_function(target_id, num_reports, method):
 
 # Start polling
 bot.polling()
-    
